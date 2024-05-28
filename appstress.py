@@ -131,6 +131,83 @@ def main():
             st.success(f"Su nivel de estrés es: Medio")
         else: 
             st.success(f"Su nivel de estrés es: Alto")
+
+        #Promedios de atributos y factores de estrés académico
+        Nivel_Ansiedad = anxiety_level * 100/21
+        Autoestima = self_esteem * 100/30
+        Historia_Salud_Mental = mental_health_history * 100/1
+        Depresión = depression * 100/27
+        Dolor_Cabeza = headache * 100/2
+        Presion_Sanguinea = blood_pressure * 100/3
+        Calidad_Sueño = sleep_quality * 100/5
+        Problema_Respiratorio = breathing_problem * 100/5
+        Nivel_Ruido = noise_level * 100/5
+        Condiciones_Vida = living_conditions * 100/5
+        Nivel_Seguridad = safety * 100/5  
+        Necesidades_Basicas = basic_needs * 100/5  
+        Rendimiento_Academico = academic_performance * 100/5
+        Carga_de_Estudio = study_load * 100/5
+        Relacion_Profesor_Estudiante = teacher_student_relationship * 100/5
+        Preocupaciones_Futuras_Carrera = future_career_concerns * 100/5
+        Apoyo_Social = social_support * 100/3
+        Presión_Pares = peer_pressure * 100/5
+        Actividades_Extracurriculares = extracurricular_activities * 100/5
+        Acoso = bullying * 100/5
+
+        factores_psicológicos = (Nivel_Ansiedad + Autoestima + Historia_Salud_Mental + Depresión) / 4
+        factores_fisiologicos = (Dolor_Cabeza + Presion_Sanguinea + Calidad_Sueño + Problema_Respiratorio) / 4
+        factores_ambientales = (Nivel_Ruido + Condiciones_Vida + Nivel_Seguridad + Necesidades_Basicas) / 4
+        factores_académicos = (Rendimiento_Academico + Carga_de_Estudio + Relacion_Profesor_Estudiante + Preocupaciones_Futuras_Carrera) / 4
+        factores_sociales = (Apoyo_Social + Presión_Pares + Actividades_Extracurriculares + Acoso) / 4
+
+        prom_factors = (factores_psicológicos + factores_fisiologicos + factores_ambientales + factores_académicos + factores_sociales)
+
+        # Cálculo de la importancia de cada factor
+        importancia_variables = {
+            'Factores Psicológicos': (((factores_psicológicos * 100) / prom_factors)),
+            'Factores Fisiológicos': (((factores_fisiologicos * 100) / prom_factors)),
+            'Factores Ambientales': (((factores_ambientales * 100) / prom_factors)),
+            'Factores Académicos': (((factores_académicos * 100) / prom_factors)),
+            'Factores Sociales': (((factores_sociales * 100) / prom_factors))
+        }
+        # Título y descripción
+        st.title("Histograma Comparativo de Factores con mayor Influencia al estrés")
+        st.write("Visualización comparativa de la importancia de cada factor en el sistema de evaluación del estrés académico.")
+
+        # Obtén los nombres de los factores y sus importancias
+        nombres_factores = list(importancia_variables.keys())
+        importancias = list(importancia_variables.values())
+
+        # Crear el histograma comparativo con etiquetas de porcentaje
+        fig, ax = plt.subplots()
+        bars = ax.barh(nombres_factores, importancias, color='mediumseagreen')
+
+        # Agregar etiquetas de porcentaje a cada barra
+        for bar, importancia in zip(bars, importancias):
+            ax.text(bar.get_width() - 5, bar.get_y() + bar.get_height()/2, f'{importancia:.2f}%', 
+                    ha='center', va='center', color='white')
+        # Configurar etiquetas y título del gráfico
+        ax.set_xlabel('Influencia Promedio (%)')
+        ax.set_ylabel('Factores')
+        ax.set_title('Influencia de los Factores en el Estrés Académico')
+
+        # Mostrar el histograma
+        st.pyplot(fig)
+
+        # Determinar el promedio más alto
+        promedio_mas_alto = max(factores_psicológicos, factores_fisiologicos, factores_ambientales, factores_académicos, factores_sociales)
+
+        # Imprimir el resultado
+        if promedio_mas_alto == factores_psicológicos:
+            st.success(f"Los factores psicológicos, son los que más influyen en su nivel de estrés.")
+        elif promedio_mas_alto == factores_fisiologicos:
+            st.success(f"Los factores fisiológicos, son los que más influyen en su nivel de estrés.")
+        elif promedio_mas_alto == factores_ambientales:
+            st.success(f"Los factores ambientales, son los que más influyen en su nivel de estrés.")
+        elif promedio_mas_alto == factores_académicos:
+            st.success(f"Los factores académicos, son los que más influyen en su nivel de estrés.")
+        else:
+            st.success(f"Los factores sociales, son los que más influyen en su nivel de estrés.")
 if __name__ == '__main__':
     main()
 
